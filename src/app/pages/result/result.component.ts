@@ -1,59 +1,58 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 import { QuizService, QuizResult } from '../../quiz.service';
 
 @Component({
   selector: 'app-result',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatButtonModule],
+  imports: [RouterModule, MatButtonModule, MatCardModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="pageShell">
-      <div class="resultCard" *ngIf="result; else noResult">
-        <div class="resultHeader">
-          <p class="finalLabel">Result</p>
-          <h2>{{ result.score }} / {{ result.total }}</h2>
-          <p class="percentage">Readiness {{ result.percentage }}%</p>
-        </div>
+      @if (result(); as result) {
+        <mat-card class="resultCard">
+          <div class="resultHeader">
+            <p class="finalLabel">Result</p>
+            <h1>{{ result.score }} / {{ result.total }}</h1>
+            <p class="percentage">Readiness {{ result.percentage }}%</p>
+          </div>
 
-        <div class="resultBody">
-          <p class="weakLabel">Weak area</p>
-          <p class="weakText">{{ result.weakArea }}</p>
-        </div>
+          <div class="resultBody">
+            <p class="weakLabel">Weak area</p>
+            <p class="weakText">{{ result.weakArea }}</p>
+          </div>
 
-        <div class="buttonGroup">
-          <button mat-raised-button color="primary" class="wideButton" (click)="retry()">
-            Retry Same Topic
-          </button>
-          <button mat-stroked-button class="wideButton secondary" routerLink="/topics">
-            Change Topic
-          </button>
-        </div>
-      </div>
-
-      <ng-template #noResult>
-        <p class="emptyState">No quiz result available yet.</p>
-        <a routerLink="/topics" class="actionLink">Choose a topic</a>
-      </ng-template>
+          <div class="buttonGroup">
+            <button mat-raised-button class="wideButton primaryButton" (click)="retry()">
+              Retry Same Topic
+            </button>
+            <button mat-stroked-button class="wideButton secondaryButton" routerLink="/topics">
+              Change Topic
+            </button>
+          </div>
+        </mat-card>
+      }
     </section>
   `,
   styles: [
     `
       .pageShell {
         min-height: 100vh;
+        background: #f8fafc;
         padding: 1.5rem 1rem 2rem;
         display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: center;
       }
 
       .resultCard {
         width: min(100%, 430px);
         padding: 2rem;
-        background: #f8fafc;
-        border-radius: 28px;
-        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
         display: flex;
         flex-direction: column;
         gap: 1.75rem;
@@ -74,9 +73,10 @@ import { QuizService, QuizResult } from '../../quiz.service';
         font-size: 0.78rem;
       }
 
-      h2 {
+      h1 {
         margin: 0;
         font-size: 3rem;
+        line-height: 1;
         color: #0f172a;
       }
 
@@ -88,8 +88,8 @@ import { QuizService, QuizResult } from '../../quiz.service';
 
       .resultBody {
         padding: 1.5rem;
-        border-radius: 22px;
-        background: white;
+        border-radius: 12px;
+        background: #f8fafc;
       }
 
       .weakLabel {
@@ -112,55 +112,44 @@ import { QuizService, QuizResult } from '../../quiz.service';
 
       .wideButton {
         width: 100%;
-        border-radius: 18px;
-        padding: 1rem 1.25rem;
+        min-height: 52px;
+        border-radius: 12px;
         font-weight: 700;
       }
 
-      .secondary {
+      .primaryButton {
+        background: #005b92;
+        color: #ffffff;
+      }
+
+      .secondaryButton {
         border-color: #dbeafe;
         color: #0f172a;
-        background: white;
-      }
-
-      .emptyState {
-        margin: 0 0 1rem;
-        color: #475569;
-        text-align: center;
-      }
-
-      .actionLink {
-        display: inline-flex;
-        justify-content: center;
-        width: 100%;
-        padding: 0.95rem 1.2rem;
-        border-radius: 18px;
-        background: #005b92;
-        color: white;
-        text-decoration: none;
-        font-weight: 600;
-        text-align: center;
+        background: #ffffff;
       }
     `
   ]
 })
 export class ResultComponent {
-  result: QuizResult | null = null;
+  private readonly router = inject(Router);
+  private readonly quizService = inject(QuizService);
 
-  constructor(private router: Router, private quizService: QuizService) {
-    this.result = this.quizService.getResult();
+  readonly result = signal<QuizResult | null>(this.quizService.getResult());
 
-    if (!this.result) {
+  constructor() {
+    if (!this.result()) {
       this.router.navigate(['/topics']);
     }
   }
 
   retry(): void {
-    if (!this.result) {
+    const result = this.result();
+
+    if (!result) {
       this.router.navigate(['/topics']);
       return;
     }
 
-    this.router.navigate(['/quiz', this.result.topicId]);
+    this.router.navigate(['/quiz', result.topicId]);
   }
 }
