@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
+import { QuizService } from '../../quiz.service';
 
 interface TopicCard {
   id: string;
@@ -22,7 +23,7 @@ interface TopicCard {
       <div class="topicGrid">
         @for (topic of topics; track topic.id) {
         <mat-card class="topicCard">
-          <a class="topicLink" [routerLink]="['/quiz', topic.id]">
+          <a class="topicLink" [routerLink]="['/quiz', topic.id]" (click)="startTopic(topic.id)">
             <span class="topicIcon" aria-hidden="true">{{ topic.icon }}</span>
             <h2 class="topicTitle">{{ topic.title }}</h2>
           </a>
@@ -110,10 +111,16 @@ interface TopicCard {
   ]
 })
 export class TopicsComponent {
+  private readonly quizService = inject(QuizService);
+
   topics: TopicCard[] = [
     { id: 'cabin', title: 'Cabin Crew Interview', icon: '✈️' },
     { id: 'safety', title: 'Safety Procedures', icon: '🛟' },
     { id: 'customer', title: 'Customer Handling', icon: '🤝' },
     { id: 'grooming', title: 'Grooming & Etiquette', icon: '✨' }
   ];
+
+  startTopic(topicId: string): void {
+    this.quizService.startTopic(topicId);
+  }
 }

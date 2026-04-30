@@ -150,6 +150,7 @@ export class ResultComponent {
       return;
     }
 
+    this.quizService.startTopic(result.topicId);
     this.router.navigate(['/quiz', result.topicId]);
   }
 }

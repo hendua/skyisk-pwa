@@ -293,6 +293,11 @@ export class QuizService {
     return this.questionsByTopic[topicId] ?? [];
   }
 
+  startTopic(topicId: string): void {
+    this.answersByTopic[topicId] = [];
+    this.lastResult = null;
+  }
+
   setAnswer(topicId: string, questionIndex: number, answerIndex: number): void {
     if (!this.answersByTopic[topicId]) {
       this.answersByTopic[topicId] = [];
