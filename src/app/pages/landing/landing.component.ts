@@ -1,14 +1,16 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-landing',
   standalone: true,
-  imports: [RouterModule, MatButtonModule],
+  imports: [RouterModule, MatButtonModule, MatCardModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="pageShell">
-      <div class="heroCard">
+      <mat-card class="heroCard">
         <div class="heroHeader">
           <span class="eyebrow">Skyisk</span>
           <h1>Test your aviation readiness</h1>
@@ -18,25 +20,27 @@ import { MatButtonModule } from '@angular/material/button';
           Build confidence for interviews, safety checks and guest service with a clean mobile-first quiz flow.
         </p>
 
-        <a routerLink="/topics" class="actionButton mat-raised-button">Start Practice</a>
-      </div>
+        <a mat-raised-button routerLink="/topics" class="actionButton">Start Practice</a>
+      </mat-card>
     </section>
   `,
   styles: [
     `
       .pageShell {
         min-height: 100vh;
+        background: #f8fafc;
+        padding: 1.5rem 1rem 2rem;
         display: flex;
+        flex-direction: column;
         align-items: center;
-        justify-content: center;
       }
 
       .heroCard {
         width: min(100%, 430px);
-        background: #f8fafc;
-        border-radius: 26px;
+        background: #ffffff;
+        border-radius: 12px;
         padding: 2.25rem 1.5rem;
-        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
         display: flex;
         flex-direction: column;
         gap: 1.75rem;
@@ -59,7 +63,7 @@ import { MatButtonModule } from '@angular/material/button';
       h1 {
         font-size: clamp(2.25rem, 5vw, 3rem);
         margin: 0;
-        line-height: 1.02;
+        line-height: 1.05;
         color: #0f172a;
       }
 
@@ -70,12 +74,9 @@ import { MatButtonModule } from '@angular/material/button';
       }
 
       .actionButton {
-        display: inline-flex;
-        justify-content: center;
         width: 100%;
-        padding: 1rem 1.25rem;
-        border-radius: 16px;
-        text-decoration: none;
+        min-height: 52px;
+        border-radius: 12px;
         color: #ffffff;
         background: #005b92;
         font-weight: 600;

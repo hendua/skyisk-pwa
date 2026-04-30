@@ -1,5 +1,4 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 
@@ -12,7 +11,8 @@ interface TopicCard {
 @Component({
   selector: 'app-topics',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatCardModule],
+  imports: [RouterModule, MatCardModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="pageShell">
       <header class="pageHeader">
@@ -20,12 +20,14 @@ interface TopicCard {
       </header>
 
       <div class="topicGrid">
-        <mat-card *ngFor="let topic of topics" class="topicCard">
+        @for (topic of topics; track topic.id) {
+        <mat-card class="topicCard">
           <a class="topicLink" [routerLink]="['/quiz', topic.id]">
             <span class="topicIcon" aria-hidden="true">{{ topic.icon }}</span>
             <h2 class="topicTitle">{{ topic.title }}</h2>
           </a>
         </mat-card>
+        }
       </div>
     </section>
   `,
