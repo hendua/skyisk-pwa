@@ -1,47 +1,40 @@
-You are an expert in TypeScript, Angular, and scalable web application development. You write maintainable, performant, and accessible code following Angular and TypeScript best practices.
+# Skyisk MVP Agent Guide
 
-## TypeScript Best Practices
+Skyisk is an Angular PWA for aviation readiness practice.
 
-- Use strict type checking
-- Prefer type inference when the type is obvious
-- Avoid the `any` type; use `unknown` when type is uncertain
+## Product Scope
 
-## Angular Best Practices
+- Keep the MVP flow focused: Landing -> Topics -> Quiz -> Result.
+- Do not add auth, dashboards, instructor tools, admin panels, payments, or backend features unless explicitly requested.
+- Build mobile-first screens that feel simple, fast, and focused for aviation interview and readiness practice.
+- Use Angular Material for UI controls and surfaces.
 
-- Always use standalone components over NgModules
-- Must NOT set `standalone: true` inside Angular decorators. It's the default.
-- Use signals for state management
-- Implement lazy loading for feature routes
-- Do NOT use the `@HostBinding` and `@HostListener` decorators. Put host bindings inside the `host` object of the `@Component` or `@Directive` decorator instead
-- Use `NgOptimizedImage` for all static images.
-  - `NgOptimizedImage` does not work for inline base64 images.
+## Angular Guidance
 
-## Components
+- Follow current Angular best practices and syntax for this project version.
+- Use standalone components and lazy-loaded routes.
+- Keep small page components inline when that keeps the code easier to read.
+- Prefer signals and `computed()` for local component state and derived state.
+- Prefer `inject()` for dependency injection in new code.
+- Use native Angular control flow (`@if`, `@for`, `@switch`) in new templates.
+- Use strict TypeScript types; avoid `any`.
+- Keep services minimal and focused. Do not create a service until it has a clear responsibility.
+- Use `ChangeDetectionStrategy.OnPush` for new components when practical.
 
-- Keep components small and focused on a single responsibility
-- Use `input()` and `output()` functions instead of decorators
-- Use `computed()` for derived state
-- Set `changeDetection: ChangeDetectionStrategy.OnPush` in `@Component` decorator
-- Prefer inline templates for small components
-- Prefer Reactive forms instead of Template-driven ones
-- Do NOT use `ngClass`, use `class` bindings instead
-- Do NOT use `ngStyle`, use `style` bindings instead
+## UI Guidelines
 
-## State Management
+- Design mobile-first with a centered content width around 430px for page flows.
+- Use Angular Material cards, buttons, progress indicators, and form controls where appropriate.
+- Keep styling clean and scoped to components.
+- Use camelCase CSS class names.
+- Keep spacing generous but compact enough for mobile quiz flows.
+- Maintain a soft, aviation-readiness visual tone rather than a dashboard or enterprise layout.
 
-- Use signals for local component state
-- Use `computed()` for derived state
-- Keep state transformations pure and predictable
-- Do NOT use `mutate` on signals, use `update` or `set` instead
+## Code Quality
 
-## Templates
-
-- Keep templates simple and avoid complex logic
-- Use native control flow (`@if`, `@for`, `@switch`) instead of `*ngIf`, `*ngFor`, `*ngSwitch`
-- Use the async pipe to handle observables
-
-## Services
-
-- Design services around a single responsibility
-- Use the `providedIn: 'root'` option for singleton services
-- Use the `inject()` function instead of constructor injection
+- Keep changes tightly scoped to the requested feature.
+- Do not introduce unnecessary abstractions or broad refactors.
+- Preserve the existing app structure unless there is a clear reason to change it.
+- Run `npm run build` before committing feature work.
+- Use clear commit messages, preferably in this style:
+  `[skyisk-mvp] type: summary`
