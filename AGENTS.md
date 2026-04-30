@@ -36,5 +36,5 @@ Skyisk is an Angular PWA for aviation readiness practice.
 - Do not introduce unnecessary abstractions or broad refactors.
 - Preserve the existing app structure unless there is a clear reason to change it.
 - Run `npm run build` before committing feature work.
-- Use clear commit messages, preferably in this style:
-  `[skyisk-mvp] type: summary`
+- Use clear commit messages in this style:
+  `type: summary`
